@@ -4,6 +4,7 @@ import db.DbConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -84,12 +85,40 @@ public class StudentController {
     public void btnSearchOnAction(ActionEvent actionEvent) {
     }
 
-    public void btnDeleteOnAction(ActionEvent actionEvent) {
+    public void btnDeleteOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+        PreparedStatement stm = DbConnection.getInstance().getConnection().prepareStatement("DELETE FROM Student WHERE student_id=?");
+        stm.setString(1, txtId.getText());
+        if (stm.executeUpdate() > 0) {
+            new Alert(Alert.AlertType.CONFIRMATION, "Deleted Student.").show();
+            loadAllStudents();
+
+        } else {
+            new Alert(Alert.AlertType.WARNING, "Try Again").show();
+            loadAllStudents();
+            
+        }
     }
 
     public void btnUpdateOnAction(ActionEvent actionEvent) {
     }
 
-    public void btnSaveOnAction(ActionEvent actionEvent) {
+    public void btnSaveOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+        student s1 = new student(
+                txtId.getText(), txtName.getText(), txtEmail.getText(), txtContact.getText(), txtAddress.getText(), txtNIC.getText()
+        );
+        PreparedStatement stm = DbConnection.getInstance().getConnection().prepareStatement("INSERT INTO Student VALUES (?,?,?,?,?,?)");
+        stm.setString(1, s1.getId());
+        stm.setString(2, s1.getName());
+        stm.setString(3, s1.getEmail());
+        stm.setString(4, s1.getContact());
+        stm.setString(5, s1.getAddress());
+        stm.setString(6, s1.getNic());
+        if (stm.executeUpdate() > 0) {
+            new Alert(Alert.AlertType.CONFIRMATION, "Saved..!").show();
+            loadAllStudents();
+        } else {
+            new Alert(Alert.AlertType.WARNING, "Try Again").show();
+            loadAllStudents();
+        }
     }
 }
