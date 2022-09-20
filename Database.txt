@@ -1,0 +1,127 @@
+CREATE DATABASE IF NOT EXISTS ijse;
+USE ijse;
+
+CREATE TABLE IF NOT EXISTS student(
+	student_id VARCHAR(45) NOT NULL,
+	student_name VARCHAR(45),
+	email 	text,
+	contact VARCHAR(20),
+	address TEXT,
+	nic VARCHAR(45),
+	CONSTRAINT PRIMARY KEY(student_id)
+	);
+SHOW TABLES;
+DESC student;
+
+CREATE TABLE IF NOT EXISTS teacher(
+	teacher_id VARCHAR(45) NOT NULL,
+	name VARCHAR(45),
+	nic VARCHAR(45),
+	contact VARCHAR(45),
+	address TEXT,
+	CONSTRAINT PRIMARY KEY(teacher_id)
+	);
+SHOW TABLES;
+DESC teacher;
+
+CREATE TABLE IF NOT EXISTS subject(
+	subject_id VARCHAR(45) NOT NULL,
+	subject_name VARCHAR(45),
+	credit DOUBLE,
+	teacher_id VARCHAR(45),
+	CONSTRAINT PRIMARY KEY(subject_id),
+	CONSTRAINT FOREIGN KEY(teacher_id) REFERENCES teacher(teacher_id) ON DELETE CASCADE ON UPDATE CASCADE
+	);
+SHOW TABLES;
+DESC subject;
+
+CREATE TABLE IF NOT EXISTS cource(
+	cource_id VARCHAR(45) NOT NULL,
+	cource_name VARCHAR(45),
+	cost DOUBLE,
+	duration VARCHAR(45),
+	subject_id VARCHAR(45),
+	CONSTRAINT PRIMARY KEY(cource_id),
+	CONSTRAINT FOREIGN KEY(subject_id) REFERENCES subject(subject_id) ON DELETE CASCADE ON UPDATE CASCADE
+	);
+SHOW TABLES;
+DESC cource;
+
+CREATE TABLE IF NOT EXISTS intake(
+	intake_id VARCHAR(45) NOT NULL,
+	start_date DATE,
+	intakecol VARCHAR(45),
+	description VARCHAR(45),
+	cource_id VARCHAR(45),
+	CONSTRAINT PRIMARY KEY(intake_id),
+	CONSTRAINT FOREIGN KEY(cource_id) REFERENCES cource(cource_id) ON DELETE CASCADE ON UPDATE CASCADE
+	);
+SHOW TABLES;
+DESC intake;
+
+CREATE TABLE IF NOT EXISTS registration(
+	registration_id VARCHAR(45) NOT NULL,
+	reg_date DATE,
+	student_id VARCHAR(45),
+	intake_id VARCHAR(45),
+	CONSTRAINT PRIMARY KEY(registration_id),
+	CONSTRAINT FOREIGN KEY(student_id) REFERENCES student(student_id) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT FOREIGN KEY(intake_id) REFERENCES intake(intake_id) ON DELETE CASCADE ON UPDATE CASCADE
+	);
+SHOW TABLES;
+DESC registration;
+
+CREATE TABLE IF NOT EXISTS payment(
+	payment_id VARCHAR(45) NOT NULL,
+	date DATE,
+	cost DOUBLE,
+	registration_id VARCHAR(45),
+	CONSTRAINT PRIMARY KEY(payment_id),
+	CONSTRAINT FOREIGN KEY(registration_id) REFERENCES registration(registration_id) ON DELETE CASCADE ON UPDATE CASCADE
+	);
+SHOW TABLES;
+DESC payment;
+
+INSERT INTO student VALUES('S-001','Janith','Janith@gmail.com','0774562046','Piliyandala','4474787V'),
+('S-002','Kelum','kelum@gmail.com','0775698362','Kaluthara','4474787V'),
+('S-003','Janidu','Janidu@gmail.com','0776565392','Pnadura','4474787V');
+
+SELECT * FROM student;
+
+INSERT INTO teacher VALUES('T-001','Janaka','765547086V','0777747','Piliyandala'),
+('T-002','nimal','2525256675V','07775656747','colombo'),
+('T-003','kasun','25234566675V','077675677747','nagoda');
+
+SELECT * FROM teacher;
+
+INSERT INTO subject VALUES('SJ-001','CNS',65,'T-001'),
+('SJ-002','OOP',45,'T-002'),
+('SJ-003','CNS',85,'T-003');
+
+SELECT * FROM subject;
+
+INSERT INTO cource VALUES('C-001','CNS',6500,'3-month','SJ-002'),
+('C-002','OOP',5500,'3-month','SJ-001'),
+('C-003','PF',2500,'3-month','SJ-003');
+
+SELECT * FROM cource;
+
+INSERT INTO intake VALUES('I-001','2022-7-13','DDA','Schoolership','C-001'),
+('I-002','2022-5-13','ADA','Schoolership','C-002'),
+('I-003','2022-2-13','FDA','Schoolership','C-003');
+
+SELECT * FROM intake;
+
+INSERT INTO registration VALUES('R-001','2022-7-13','S-001','I-001'),
+('R-002','2022-4-13','S-002','I-002'),
+('R-003','2022-2-13','S-003','I-003');
+
+SELECT * FROM registration;
+
+INSERT INTO payment VALUES('P-001','2022-7-13',6500,'R-001'),
+('P-002','2022-4-13',5500,'R-002'),
+('P-003','2022-2-13',1500,'R-003');
+
+SELECT * FROM payment;
+
+
