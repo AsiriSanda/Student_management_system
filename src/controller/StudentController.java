@@ -103,11 +103,11 @@ public class StudentController {
         if (stm.executeUpdate() > 0) {
             new Alert(Alert.AlertType.CONFIRMATION, "Deleted Student.").show();
             loadAllStudents();
-
+            clearTextField();
         } else {
             new Alert(Alert.AlertType.WARNING, "Try Again").show();
             loadAllStudents();
-
+            clearTextField();
         }
     }
 
@@ -126,7 +126,7 @@ public class StudentController {
         if (stm.executeUpdate() > 0) {
             new Alert(Alert.AlertType.CONFIRMATION, "Updated Student.").show();
             loadAllStudents();
-
+            clearTextField();
         } else {
             new Alert(Alert.AlertType.WARNING, "Try Again").show();
         }
@@ -147,9 +147,20 @@ public class StudentController {
         if (stm.executeUpdate() > 0) {
             new Alert(Alert.AlertType.CONFIRMATION, "Saved..!").show();
             loadAllStudents();
+            clearTextField();
         } else {
             new Alert(Alert.AlertType.WARNING, "Try Again").show();
             loadAllStudents();
+            clearTextField();
         }
+    }
+
+    private void clearTextField() {
+        txtId.clear();
+        txtName.clear();
+        txtEmail.clear();
+        txtContact.clear();
+        txtAddress.clear();
+        txtNIC.clear();
     }
 }
