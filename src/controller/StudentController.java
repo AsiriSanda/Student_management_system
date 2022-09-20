@@ -95,11 +95,30 @@ public class StudentController {
         } else {
             new Alert(Alert.AlertType.WARNING, "Try Again").show();
             loadAllStudents();
-            
+
         }
     }
 
-    public void btnUpdateOnAction(ActionEvent actionEvent) {
+    public void btnUpdateOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+        student s1 = new student(
+                txtId.getText(), txtName.getText(), txtEmail.getText(), txtContact.getText(), txtAddress.getText(), txtNIC.getText()
+        );
+        PreparedStatement stm = DbConnection.getInstance().getConnection().prepareStatement("UPDATE Student SET student_name=?, email=?, contact=?, address=?, nic=? WHERE student_id=?");
+        stm.setString(1, s1.getName());
+        stm.setString(2, s1.getEmail());
+        stm.setString(3, s1.getContact());
+        stm.setString(4, s1.getAddress());
+        stm.setString(5, s1.getNic());
+        stm.setString(6, s1.getId());
+
+        if (stm.executeUpdate() > 0) {
+            new Alert(Alert.AlertType.CONFIRMATION, "Updated Student.").show();
+            loadAllStudents();
+            
+        } else {
+            new Alert(Alert.AlertType.WARNING, "Try Again").show();
+        }
+
     }
 
     public void btnSaveOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
