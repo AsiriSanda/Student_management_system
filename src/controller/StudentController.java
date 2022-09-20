@@ -82,7 +82,19 @@ public class StudentController {
         }
     }
 
-    public void btnSearchOnAction(ActionEvent actionEvent) {
+    public void btnSearchOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+        PreparedStatement stm = DbConnection.getInstance().getConnection().prepareStatement("SELECT * FROM Student WHERE student_id=?");
+        stm.setString(1, txtId.getText());
+        ResultSet set = stm.executeQuery();
+        if (set.next()) {
+            txtName.setText(set.getString(2));
+            txtEmail.setText(set.getString(3));
+            txtContact.setText(set.getString(4));
+            txtAddress.setText(set.getString(5));
+            txtNIC.setText(set.getString(6));
+        } else {
+            new Alert(Alert.AlertType.WARNING, "Empty Result").show();
+        }
     }
 
     public void btnDeleteOnAction(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
@@ -114,7 +126,7 @@ public class StudentController {
         if (stm.executeUpdate() > 0) {
             new Alert(Alert.AlertType.CONFIRMATION, "Updated Student.").show();
             loadAllStudents();
-            
+
         } else {
             new Alert(Alert.AlertType.WARNING, "Try Again").show();
         }
